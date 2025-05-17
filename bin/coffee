@@ -61,7 +61,7 @@ if [[ "$1" == "--version" ]]; then
 fi
 
 if [[ "$1" == "default" ]]; then
-    coffee preset modern
+    coffee preset cappuccino
     echo
     echo "✅ Configuration reset."
     exit 0
