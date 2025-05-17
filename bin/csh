@@ -15,7 +15,7 @@ coffee_shell() {
   if [[ ! -d "$COFFEE/presets" ]]; then
       mkdir "$COFFEE/presets"
       coffee preset --copy
-      coffee preset modern
+      coffee preset cappuccino
   fi
 
   # Load rest of the shell
