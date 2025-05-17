@@ -47,7 +47,7 @@ coffee_shell() {
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
-            $cmd
+            eval "$cmd" 2> >(while read -r line; do echo "❌ $line"; done)
         else
             echo "❌ Unknown command: $cmd"
         fi
