@@ -48,7 +48,9 @@ coffee_shell() {
         coffee --version
         ;;
       *)
-        $cmd
+        if ! "$cmd"; then
+            echo "❌ Command not found: $cmd"
+        fi
         ;;
     esac
   done
