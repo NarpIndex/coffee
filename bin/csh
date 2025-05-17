@@ -14,7 +14,7 @@ coffee_shell() {
 
   # Load rest of the shell
   if [[ ! -f "$COFFEE/done" ]]; then
-      echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to see all coffee commands."
+      echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to see get started."
       touch "$COFFEE/done"
   fi
   if [[ ! -f "$HISTFILE" ]]; then
