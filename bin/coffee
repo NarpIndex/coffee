@@ -14,7 +14,7 @@ if [[ "$1" == "set" && -n "$2" && -n "$3" ]]; then
     # Create config file if it doesn't exist
     if [[ ! -f "$CONF_FILE" ]]; then
         touch "$CONF_FILE"
-        echo -e "#!/bin/bash\n" | sudo tee "$CONF_FILE"
+        echo -e "#!/bin/bash\n" | tee "$CONF_FILE"
     fi
 
     # Remove existing line with the variable (if it exists)
