@@ -21,8 +21,8 @@ EOF
 # ~/.coffee/profile
 # Run commands when Coffee Shell starts
 
-echo "✨ Coffee Profile Loaded!"
 export PATH="$HOME/.coffee/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 EOF
   fi
 
