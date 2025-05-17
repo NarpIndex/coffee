@@ -1,0 +1,53 @@
+#!/bin/bash
+
+COFFEE_DIR="$HOME/.coffee"
+CONF_FILE="$COFFEE_DIR/config/csh.conf"
+
+if [[ ! -d "$COFFEE_DIR" ]]; then
+    mkdir -p "$COFFEE_DIR/config"
+fi
+
+if [[ "$1" == "set" && -n "$2" && -n "$3" ]]; then
+    VAR_NAME="$2"
+    VAR_VALUE="$3"
+
+    # Create config file if it doesn't exist
+    if [[ ! -f "$CONF_FILE" ]]; then
+        echo -e "#!/bin/bash\n" > "$CONF_FILE"
+    fi
+
+    # Remove existing line with the variable (if it exists)
+    sed -i "/^\s*${VAR_NAME}=.*/d" "$CONF_FILE"
+
+    # Append new variable setting
+    echo "${VAR_NAME}=\"${VAR_VALUE}\"" >> "$CONF_FILE"
+    echo "✅ Set $VAR_NAME to \"$VAR_VALUE\" in $CONF_FILE"
+fi
+
+if [[ $# -eq 0 ]]; then
+    echo "❔ Run \"help\" (in shell) or \"coffee --help\" for usage."
+    exit 1
+fi
+
+if [[ "$1" == "--help" ]]; then
+    echo "💡 Coffee Help"
+    echo
+    echo "🐚 Shell:"
+    echo "    exit - Exit the Shell"
+    echo "    help - See the help message."
+    echo "    version - See the version."
+    echo "🎈 CLI:"
+    echo "    coffee set <VAR_NAME> <VALUE> - Set a shell config variable."
+    echo "    coffee --help - See the help message."
+    echo "    coffee --version - See the version."
+    echo "💻 Other:"
+    echo "    csh - Run a Coffee Shell session."
+    echo "    chsh -s /usr/bin/csh - Change your shell to Coffee Shell."
+    echo
+fi
+
+if [[ "$1" == "--version" ]]; then
+    source /usr/bitey/software/coffee/pak.conf
+    VERSION="$PACKAGE_VERSION"
+    echo "☕ Coffee $VERSION"
+fi
