@@ -114,8 +114,12 @@ fi
 if [[ "$1" == "preset" ]]; then
     PRESET="$2"
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
+    if [[ -z "$PRESET" ]]; then
+        echo "❌ Please specify a preset."
+        exit 1
+    fi
     if [[ ! -d "$PRESET_DIR" ]]; then # Prevent accedental config deletion and copying non-existent presets.
-        echo "❌ Preset $PRESET can't be found."
+        echo "❌ Preset $PRESET cannot be found."
         exit 1
     fi
     rm -rf "$COFFEE_DIR/config"
