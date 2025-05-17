@@ -44,6 +44,7 @@ if [[ "$1" == "--help" ]]; then
     echo "🎈 CLI:"
     echo "    coffee set <VAR_NAME> <VALUE> - Set a shell configuration variable."
     echo "    coffee default - Reset your configuration."
+    echo "    coffee preset <PRESET_NAME> - Load a preset."
     echo "    coffee --help - See the help message."
     echo "    coffee --version - See the version."
     echo "💻 Other:"
@@ -60,5 +61,19 @@ fi
 if [[ "$1" == "default" ]]; then
     rm -rf "$HOME/.coffee/config"
     echo "✅ Configuration reset. Please restart Coffee Shell to apply changes."
+    exit 0
+fi
+
+if [[ "$1" == "preset" ]]; then
+    PRESET="$2"
+    PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
+    if [[ ! -d "$PRESET_DIR" ]]; then # Prevent accedental config deletion and copying non-existent presets.
+        echo "❌ Preset $PRESET can't be found."
+        exit 1
+    fi
+    rm -rf "$COFFEE_DIR/config"
+    mkdir "$COFFEE_DIR/config"
+    cp $PRESET_DIR/* "$COFFEE_DIR/config"
+    echo "✅ Loaded preset $PRESET."
     exit 0
 fi
