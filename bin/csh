@@ -23,6 +23,8 @@ coffee_shell() {
   history -r "$HISTFILE"
 
   while true; do
+    local PROMPT="☕️ $(whoami) $(pwd)> "
+    PROMPT="${CSH_PROMPT:-$PROMPT}"
     read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
 
