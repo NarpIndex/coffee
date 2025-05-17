@@ -21,7 +21,12 @@ coffee_shell() {
   if [[ ! -f "$HISTFILE" ]]; then
       touch "$HISTFILE"
   fi
+  for plugin in "$COFFEE/plugins/"*.sh; do
+      [[ -f "$plugin" ]] && source "$plugin"
+  done
   [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
+  
+
   history -r "$HISTFILE"
 
   while true; do
