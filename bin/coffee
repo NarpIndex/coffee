@@ -68,12 +68,41 @@ if [[ "$1" == "default" ]]; then
 fi
 
 if [[ "$1" == "preset" && "$2" == "--list" ]]; then
-    echo "📦 Available presets:"
-    for dir in "$COFFEE_DIR/presets/"*/ ; do
-        basename "$dir"
+    PRESET_PATH="$COFFEE_DIR/presets"
+    if [[ ! -d "$PRESET_PATH" ]]; then
+        echo "❌ No presets found."
+        exit 1
+    fi
+
+    echo "🎨 Available Presets:"
+    for d in "$PRESET_PATH"/*; do
+        [ -d "$d" ] || continue
+        ID="$(basename "$d")"
+        INFO="$d/info.txt"
+
+        if [[ -f "$INFO" ]]; then
+            # Safely load fields from info.txt
+            ICON=""
+            NAME=""
+            DESCRIPTION=""
+            while IFS='=' read -r key value; do
+                key="${key//\"/}"
+                value="${value//\"/}"
+                case "$key" in
+                    ICON) ICON="${value}" ;;
+                    NAME) NAME="${value}" ;;
+                    DESCRIPTION) DESCRIPTION="${value}" ;;
+                esac
+            done < "$INFO"
+
+            printf "  %s %s (%s) - %s\n" "${ICON:-📁}" "${NAME:-$ID}" "$ID" "${DESCRIPTION:-No description.}"
+        else
+            printf "  📁 %s (%s) - No description.\n" "$ID" "$ID"
+        fi
     done
     exit 0
 fi
+
 
 if [[ "$1" == "preset" && "$2" == "--copy" ]]; then
     rm -rf "$COFFEE_DIR/presets"
