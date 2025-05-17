@@ -45,14 +45,8 @@ coffee_shell() {
       version)
         coffee --version
         ;;
-      clear)
-        clear
-        ;;
-      history)
-        history
-        ;;
       *)
-        bash -c "$cmd"
+        $cmd
         ;;
     esac
   done
