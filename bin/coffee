@@ -37,7 +37,8 @@ if [[ "$1" == "--help" ]]; then
     echo "    help - See the help message."
     echo "    version - See the version."
     echo "🎈 CLI:"
-    echo "    coffee set <VAR_NAME> <VALUE> - Set a shell config variable."
+    echo "    coffee set <VAR_NAME> <VALUE> - Set a shell configuration variable."
+    echo "    coffee default - Reset your configuration."
     echo "    coffee --help - See the help message."
     echo "    coffee --version - See the version."
     echo "💻 Other:"
@@ -50,4 +51,8 @@ if [[ "$1" == "--version" ]]; then
     source /usr/bitey/software/coffee/pak.conf
     VERSION="$PACKAGE_VERSION"
     echo "☕ Coffee $VERSION"
+fi
+
+if [[ "$1" == "default" ]]; then
+    rm -rf "$HOME/.coffee/config"
 fi
