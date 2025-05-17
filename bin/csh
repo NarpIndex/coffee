@@ -29,6 +29,7 @@ coffee_shell() {
   while true; do
     [[ -f "$CONF" ]] && source "$CONF" # Load config
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
+    local ERROR="${CSH_ERROR:-❌}"
     read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
 
@@ -47,9 +48,9 @@ coffee_shell() {
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
-            eval "$cmd" 2> >(sed "s|^.*: line [0-9]*: |❌ |" >&2)
+            eval "$cmd" 2> >(sed "s|^.*: line [0-9]*: |$ERROR |" >&2)
         else
-            echo "❌ Unknown command: $cmd"
+            echo "$ERROR Unknown command: $cmd"
         fi
         ;;
 
