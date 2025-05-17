@@ -145,7 +145,15 @@ EOF
     fi
     if [[ "$2" == "--del" ]]; then
         PRESET="$3"
+
+        
+        if [[ -z "$PRESET" ]]; then
+            echo "❌ Please specify a preset name to delete."
+            exit 1
+        fi
+        
         PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
+        
         if [[ "$PRESET" == "cappuccino" ]]; then
             echo "❌ Whoa there! Cappucino is the Coffee Shell's main preset and therefore cannot be deleted."
             exit 1
@@ -160,12 +168,6 @@ EOF
     fi
 
     PRESET="$2"
-
-    if [[ -z "$PRESET" ]]; then
-        echo "❌ Please specify a preset name to delete."
-        exit 1
-    fi
-
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
     
     if [[ -z "$PRESET" ]]; then
