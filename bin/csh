@@ -33,7 +33,6 @@ coffee_shell() {
 
     case "$cmd" in
       exit)
-        echo "☕️ Goodbye!"
         break
         ;;
       reload)
