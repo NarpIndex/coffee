@@ -1,0 +1,59 @@
+#!/bin/bash
+
+coffee_shell() {
+  local CONF="$HOME/.coffee/config/csh.conf"
+  local HISTFILE="$HOME/.coffee/history"
+  local PROMPT="☕️ $(whoami) $(pwd)> "
+
+  # Load prompt from config
+  if [[ -f "$CONF" ]]; then
+    source "$CONF"
+  fi
+
+  PROMPT="${CSH_PROMPT:-$PROMPT}"
+
+  echo -e "☕️ Welcome to Coffee Shell!\nType 'help' to get started."
+
+  if [[ ! -d "$HOME/.coffee" ]]; then
+      mkdir -p "$HOME/.coffee"
+  fi
+  if [[ ! -f "$HISTFILE" ]]; then
+      touch "$HISTFILE"
+  fi
+  history -r "$HISTFILE"
+
+  while true; do
+    read -e -rp "$PROMPT " cmd
+    [[ -z "$cmd" ]] && continue
+
+    echo "$cmd" >> "$HISTFILE"
+    history -s "$cmd"
+
+    case "$cmd" in
+      exit)
+        echo "☕️ Goodbye!"
+        break
+        ;;
+      reload)
+        echo "♻️ Reloading Coffee Shell..."
+        coffee_shell
+        return 0
+        ;;
+      help)
+        coffee --help
+        ;;
+      version)
+        coffee --version
+        ;;
+      clear)
+        clear
+        ;;
+      *)
+        bash -c "$cmd"
+        ;;
+    esac
+  done
+}
+
+coffee_shell
+exit 0
