@@ -47,7 +47,7 @@ coffee_shell() {
         coffee --version
         ;;
       reload)
-        echo "♻ Reloading Coffee Shell..."
+        echo "♻  Reloading Coffee Shell..."
         coffee_shell
         return 0
         ;;
