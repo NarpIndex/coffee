@@ -1,15 +1,19 @@
 #!/bin/bash
 
 coffee_shell() {
-  local CONF="$HOME/.coffee/config/csh.conf"
-  local HISTFILE="$HOME/.coffee/history"
+  local COFFEE="$HOME/.coffee"
+  local CONF="$COFFEE/config/csh.conf"
+  local HISTFILE="$COFFEE/history"
 
   # Load prompt from config
   if [[ -f "$CONF" ]]; then
     source "$CONF"
   fi
 
-  echo -e "☕️ Welcome to Coffee Shell!\nType 'help' to get started."
+  if [[ ! -f "$COFFEE/done" ]]; then
+      echo -e "☕️ Welcome to Coffee Shell!\nType 'help' to get started."
+      touch "$COFFEE/done"
+  fi
 
   if [[ ! -d "$HOME/.coffee" ]]; then
       mkdir -p "$HOME/.coffee"
