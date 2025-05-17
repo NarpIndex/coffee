@@ -38,7 +38,7 @@ coffee_shell() {
     [[ -f "$CONF" ]] && source "$CONF" # Load config
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
-    read -e -rp "$PROMPT " cmd
+    [[ -z "$cmd" ]] && read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
 
     echo "$cmd" >> "$HISTFILE"
@@ -70,6 +70,16 @@ coffee_shell() {
     esac
   done
 }
+
+# Coffee Shell Script Mode
+if [[ -f "$1" ]]; then
+    SCRIPT="$1"
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        cmd="$line"
+        source /usr/bin/coffee_shell || exit 1
+    done < "$SCRIPT"
+    exit 0
+fi
 
 coffee_shell
 exit 0
