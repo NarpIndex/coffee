@@ -143,6 +143,21 @@ EOF
         echo "📝 Now edit csh.conf and info.txt to customize it."
         exit 0
     fi
+    if [[ "$2" == "--del" ]]; then
+        PRESET="$3"
+        PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
+        if [[ "$PRESET" == "cappuccino" ]]; then
+            echo "❌ Whoa there! Cappucino is the Coffee Shell's main preset and therefore cannot be deleted."
+            exit 1
+        fi
+        if [[ ! -d "$PRESET_DIR" ]]; then
+            echo "❌ Preset $PRESET cannot be found."
+            exit 1
+        fi
+        rm -rf "$PRESET_DIR"
+        echo "✅ Deleted preset $PRESET."
+        exit 0
+    fi
 
     PRESET="$2"
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
