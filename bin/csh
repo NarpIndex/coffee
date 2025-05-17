@@ -49,7 +49,7 @@ coffee_shell() {
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
-            "$cmd"
+            $cmd
         else
             echo "❌ Unknown command: $cmd"
         fi
