@@ -68,6 +68,7 @@ coffee_shell() {
         ;;
 
     esac
+    cmd=""
   done
 }
 
