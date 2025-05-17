@@ -1,0 +1,3 @@
+NAME="Cappuccino"
+ICON="☕"
+DESCRIPTION="A modern, casual preset."
