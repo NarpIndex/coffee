@@ -1,0 +1,3 @@
+NAME="Classic"
+ICON="📄"
+DESCRIPTION="A minimal, structured preset."
