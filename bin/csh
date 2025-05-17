@@ -48,8 +48,8 @@ coffee_shell() {
         ;;
       reload)
         echo "♻  Reloading Coffee Shell..."
-        coffee_shell
-        return 0
+        exec /usr/bin/csh
+        exit 0
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
