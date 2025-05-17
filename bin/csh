@@ -38,7 +38,9 @@ coffee_shell() {
     [[ -f "$CONF" ]] && source "$CONF" # Load config
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
-    [[ -z "$cmd" ]] && echo -e "$PROMPT " && read -e -r cmd
+    if [[ -z "$cmd" ]]; then
+        IFS= read -r -e -p "$(echo -e "$PROMPT")" cmd
+    fi
     [[ -z "$cmd" ]] && continue
 
     echo "$cmd" >> "$HISTFILE"
