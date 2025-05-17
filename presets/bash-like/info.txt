@@ -1,0 +1,3 @@
+NAME="BASH-Like"
+ICON="💻"
+DESCRIPTION="A port of the BASH interface to CSH."
