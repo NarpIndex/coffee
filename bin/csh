@@ -46,8 +46,8 @@ coffee_shell() {
       version)
         coffee --version
         ;;
-      reload)
-        echo "♻  Reloading Coffee Shell..."
+      restart)
+        echo "♻  Restarting Coffee Shell..."
         exec /usr/bin/csh
         exit 0
         ;;
