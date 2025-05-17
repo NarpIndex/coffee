@@ -18,6 +18,7 @@ EOF
   fi
 
   source "$COFFEE/rc"
+  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   if [[ ! -d "$COFFEE/presets" ]]; then
       mkdir "$COFFEE/presets"
