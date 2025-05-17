@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /usr/bitey/software/coffee/pak.conf
+VERSION="$PACKAGE_VERSION"
 COFFEE_DIR="$HOME/.coffee"
 CONF_FILE="$COFFEE_DIR/config/csh.conf"
 
@@ -51,8 +53,6 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 if [[ "$1" == "--version" ]]; then
-    source /usr/bitey/software/coffee/pak.conf
-    VERSION="$PACKAGE_VERSION"
     echo "☕ Coffee $VERSION"
     exit 0
 fi
