@@ -35,9 +35,10 @@ if [[ "$1" == "--help" ]]; then
     echo "💡 Coffee Help"
     echo
     echo "🐚 Shell:"
-    echo "    exit - Exit the Shell"
+    echo "    exit - Exit the Shell."
     echo "    help - See the help message."
     echo "    version - See the version."
+    echo "    restart - Restart the Shell.
     echo "🎈 CLI:"
     echo "    coffee set <VAR_NAME> <VALUE> - Set a shell configuration variable."
     echo "    coffee default - Reset your configuration."
