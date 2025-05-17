@@ -16,6 +16,16 @@ coffee_shell() {
 EOF
       chmod +x "$COFFEE/rc"
   fi
+  if [[ ! -f "$COFFEE/profile" ]]; then
+      cat << 'EOF' > "$COFFEE/profile"
+# ~/.coffee/profile
+# Run commands when Coffee Shell starts
+
+echo "✨ Coffee Profile Loaded!"
+export PATH="$HOME/.coffee/bin:$PATH"
+EOF
+  fi
+
 
   source "$COFFEE/rc"
 
