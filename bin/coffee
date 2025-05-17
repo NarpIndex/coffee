@@ -78,7 +78,7 @@ fi
 if [[ "$1" == "preset" && "$2" == "--copy" ]]; then
     rm -rf "$COFFEE_DIR/presets"
     mkdir "$COFFEE_DIR/presets"
-    cp /usr/bitey/software/coffee/presets/* "$COFFEE_DIR/presets"
+    cp -r /usr/bitey/software/coffee/presets/* "$COFFEE_DIR/presets"
     exit 0
 fi
 
@@ -91,7 +91,7 @@ if [[ "$1" == "preset" ]]; then
     fi
     rm -rf "$COFFEE_DIR/config"
     mkdir "$COFFEE_DIR/config"
-    cp $PRESET_DIR/* "$COFFEE_DIR/config"
+    cp -r $PRESET_DIR/* "$COFFEE_DIR/config"
     echo "✅ Loaded preset $PRESET."
     exit 0
 fi
