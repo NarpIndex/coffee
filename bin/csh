@@ -33,7 +33,7 @@ coffee_shell() {
         break
         ;;
       reload)
-        echo "♻️ Reloading Coffee Shell..."
+        echo "♻️ Reloading Coffee Shell Config..."
         coffee_shell
         return 0
         ;;
