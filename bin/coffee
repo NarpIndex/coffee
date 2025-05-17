@@ -22,11 +22,12 @@ if [[ "$1" == "set" && -n "$2" && -n "$3" ]]; then
     # Append new variable setting
     echo "${VAR_NAME}=\"${VAR_VALUE}\"" >> "$CONF_FILE"
     echo "✅ Set $VAR_NAME to \"$VAR_VALUE\" in $CONF_FILE"
+    exit 0
 fi
 
 if [[ $# -eq 0 ]]; then
     echo "❔ Run \"help\" (in shell) or \"coffee --help\" for usage."
-    exit 1
+    exit 0
 fi
 
 if [[ "$1" == "--help" ]]; then
@@ -51,8 +52,11 @@ if [[ "$1" == "--version" ]]; then
     source /usr/bitey/software/coffee/pak.conf
     VERSION="$PACKAGE_VERSION"
     echo "☕ Coffee $VERSION"
+    exit 0
 fi
 
 if [[ "$1" == "default" ]]; then
     rm -rf "$HOME/.coffee/config"
+    echo "✅ Configuration reset."
+    exit 0
 fi
