@@ -64,6 +64,14 @@ if [[ "$1" == "default" ]]; then
     exit 0
 fi
 
+if [[ "$1" == "preset" && "$2" == "--list" ]]; then
+    echo "📦 Available presets:"
+    for dir in "$COFFEE_DIR/presets/"*/ ; do
+        basename "$dir"
+    done
+    exit 0
+fi
+
 if [[ "$1" == "preset" ]]; then
     PRESET="$2"
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
