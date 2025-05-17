@@ -17,7 +17,7 @@ EOF
       chmod +x "$COFFEE/rc"
   fi
 
-  exec "$COFFEE/rc"
+  source "$COFFEE/rc"
 
   if [[ ! -d "$COFFEE/presets" ]]; then
       mkdir "$COFFEE/presets"
