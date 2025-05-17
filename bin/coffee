@@ -45,6 +45,7 @@ if [[ "$1" == "--help" ]]; then
     echo "    coffee set <VAR_NAME> <VALUE> - Set a shell configuration variable."
     echo "    coffee default - Reset your configuration."
     echo "    coffee preset <PRESET_NAME> - Load a preset."
+    echo "    coffee preset --copy - Create presets directory and copy default presets."
     echo "    coffee preset --list - See all presets."
     echo "    coffee --help - See the help message."
     echo "    coffee --version - See the version."
@@ -70,6 +71,13 @@ if [[ "$1" == "preset" && "$2" == "--list" ]]; then
     for dir in "$COFFEE_DIR/presets/"*/ ; do
         basename "$dir"
     done
+    exit 0
+fi
+
+if [[ "$1" == "preset" && "$2" == "--copy" ]]; then
+    rm -rf "$COFFEE_DIR/presets"
+    mkdir "$COFFEE_DIR/presets"
+    cp /usr/bitey/software/coffee/presets/* "$COFFEE_DIR/presets"
     exit 0
 fi
 
