@@ -3,14 +3,11 @@
 coffee_shell() {
   local CONF="$HOME/.coffee/config/csh.conf"
   local HISTFILE="$HOME/.coffee/history"
-  local PROMPT="☕️ $(whoami) $(pwd)> "
 
   # Load prompt from config
   if [[ -f "$CONF" ]]; then
     source "$CONF"
   fi
-
-  PROMPT="${CSH_PROMPT:-$PROMPT}"
 
   echo -e "☕️ Welcome to Coffee Shell!\nType 'help' to get started."
 
@@ -23,8 +20,7 @@ coffee_shell() {
   history -r "$HISTFILE"
 
   while true; do
-    local PROMPT="☕️ $(whoami) $(pwd)> "
-    PROMPT="${CSH_PROMPT:-$PROMPT}"
+    local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)> }"
     read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
 
