@@ -18,7 +18,6 @@ EOF
   fi
 
   source "$COFFEE/rc"
-  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   if [[ ! -d "$COFFEE/presets" ]]; then
       mkdir "$COFFEE/presets"
@@ -38,7 +37,7 @@ EOF
       [[ -f "$plugin" ]] && source "$plugin"
   done
   [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
-  
+  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   history -r "$HISTFILE"
 
