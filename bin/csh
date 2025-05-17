@@ -6,6 +6,7 @@ coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
   local HISTFILE="$COFFEE/history"
+  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   # Ensure shell directory exists
   if [[ ! -d "$COFFEE" ]]; then
@@ -24,6 +25,7 @@ EOF
 export PATH="$HOME/.coffee/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 EOF
+  source "$COFFEE/profile"
   fi
 
 
@@ -47,7 +49,6 @@ EOF
       [[ -f "$plugin" ]] && source "$plugin"
   done
   [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
-  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   history -r "$HISTFILE"
 
