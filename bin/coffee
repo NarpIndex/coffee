@@ -112,6 +112,37 @@ if [[ "$1" == "preset" && "$2" == "--copy" ]]; then
 fi
 
 if [[ "$1" == "preset" ]]; then
+    if [[ "$2" == "--new" ]]; then
+        NEW_ID="$3"
+        if [[ -z "$NEW_ID" ]]; then
+            echo "❌ Please specify a preset ID. Usage: coffee preset --new <ID>"
+            exit 1
+        fi
+        NEW_PRESET="$COFFEE_DIR/presets/$NEW_ID"
+        if [[ -d "$NEW_PRESET" ]]; then
+            echo "❌ Preset $NEW_ID already exists."
+            exit 1
+        fi
+        mkdir -p "$NEW_PRESET"
+
+        # Create default config file
+        cat <<EOF > "$NEW_PRESET/csh.conf"
+CSH_PROMPT="command>> "
+CSH_ERROR="error>>"
+EOF
+
+        # Create default info.txt
+        cat <<EOF > "$NEW_PRESET/info.txt"
+NAME="My Custom Preset"
+ICON="🛠️"
+DESCRIPTION="A new custom Coffee Shell preset."
+EOF
+
+        echo "✅ Created new preset: $NEW_ID at $NEW_PRESET"
+        echo "📝 Now edit csh.conf and info.txt to customize it."
+        exit 0
+    fi
+
     PRESET="$2"
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
     if [[ -z "$PRESET" ]]; then
