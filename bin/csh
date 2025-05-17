@@ -12,6 +12,11 @@ coffee_shell() {
     mkdir -p "$COFFEE"
   fi
 
+  if [[ ! -d "$COFFEE/presets" ]]; then
+      mkdir "$COFFEE/presets"
+      coffee preset --copy
+  fi
+
   # Load rest of the shell
   if [[ ! -f "$COFFEE/done" ]]; then
       echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to get started."
