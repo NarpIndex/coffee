@@ -48,6 +48,9 @@ coffee_shell() {
       clear)
         clear
         ;;
+      history)
+        history
+        ;;
       *)
         bash -c "$cmd"
         ;;
