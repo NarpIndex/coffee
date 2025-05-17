@@ -46,6 +46,10 @@ coffee_shell() {
       version)
         coffee --version
         ;;
+      reload)
+        echo "♻ Reloading Coffee Shell..."
+        coffee_shell
+        return 0
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
             eval "$cmd" 2> >(sed "s|^.*: line [0-9]*: |$ERROR |" >&2)
