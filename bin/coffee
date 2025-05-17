@@ -61,8 +61,9 @@ if [[ "$1" == "--version" ]]; then
 fi
 
 if [[ "$1" == "default" ]]; then
-    rm -rf "$HOME/.coffee/config"
-    echo "✅ Configuration reset. Please restart Coffee Shell to apply changes."
+    coffee preset modern
+    echo
+    echo "✅ Configuration reset."
     exit 0
 fi
 
