@@ -39,7 +39,7 @@ coffee_shell() {
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
     if [[ -z "$cmd" ]]; then
-        IFS= read -r -e -p "$(echo -e "$PROMPT")" cmd
+        IFS= read -r -e -p "$(echo -e "$PROMPT ")" cmd
     fi
     [[ -z "$cmd" ]] && continue
 
