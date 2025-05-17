@@ -2,6 +2,10 @@
 
 source /usr/bitey/software/coffee/pak.conf
 VERSION="$PACKAGE_VERSION"
+if [[ -d "$HOME/.caffeine" ]]; then
+    source "$HOME/.caffeine/pak.conf"
+    CAFFEINE_VERSION="$PACKAGE_VERSION"
+fi
 COFFEE_DIR="$HOME/.coffee"
 CONF_FILE="$COFFEE_DIR/config/csh.conf"
 
@@ -58,6 +62,9 @@ fi
 
 if [[ "$1" == "--version" ]]; then
     echo "☕ Coffee $VERSION"
+    if [[ -d "$HOME/.caffeine" ]]; then
+        echo "🤎 Caffeine $CAFFEINE_VERSION"
+    fi
     exit 0
 fi
 
