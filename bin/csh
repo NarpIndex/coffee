@@ -27,10 +27,7 @@ coffee_shell() {
   history -r "$HISTFILE"
 
   while true; do
-    # Load config
-    if [[ -f "$CONF" ]]; then
-        source "$CONF"
-    fi
+    [[ -f "$CONF" ]] && source "$CONF" # Load config
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
