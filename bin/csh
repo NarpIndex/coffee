@@ -48,10 +48,13 @@ coffee_shell() {
         coffee --version
         ;;
       *)
-        if ! "$cmd"; then
-            echo "❌ Command not found: $cmd"
+        if command -v "${cmd%% *}" >/dev/null 2>&1; then
+            "$cmd"
+        else
+            echo "❌ Unknown command: $cmd"
         fi
         ;;
+
     esac
   done
 }
