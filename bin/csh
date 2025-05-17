@@ -10,11 +10,6 @@ coffee_shell() {
     mkdir -p "$COFFEE"
   fi
 
-  # Load config
-  if [[ -f "$CONF" ]]; then
-    source "$CONF"
-  fi
-
   # Load rest of the shell
   if [[ ! -f "$COFFEE/done" ]]; then
       echo -e "☕️ Welcome to Coffee Shell!\nType 'help' to get started."
@@ -32,6 +27,10 @@ coffee_shell() {
   history -r "$HISTFILE"
 
   while true; do
+    # Load config
+    if [[ -f "$CONF" ]]; then
+        source "$CONF"
+    fi
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     read -e -rp "$PROMPT " cmd
     [[ -z "$cmd" ]] && continue
@@ -42,11 +41,6 @@ coffee_shell() {
     case "$cmd" in
       exit)
         break
-        ;;
-      reload)
-        echo "♻️ Reloading Coffee Shell Config..."
-        coffee_shell
-        return 0
         ;;
       help)
         coffee --help
