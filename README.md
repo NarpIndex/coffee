@@ -56,6 +56,6 @@ coffee preset --del <preset-id>
 
 ---
 
-🤎 Caffeine Framework
+## 🤎 Caffeine Framework
 Check out [Caffeine](https://github.com/NarpIndex/caffeine) — the plugin and preset manager for Coffee.
 
