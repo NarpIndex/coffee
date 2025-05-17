@@ -59,6 +59,6 @@ fi
 
 if [[ "$1" == "default" ]]; then
     rm -rf "$HOME/.coffee/config"
-    echo "✅ Configuration reset."
+    echo "✅ Configuration reset. Please restart Coffee Shell to apply changes."
     exit 0
 fi
