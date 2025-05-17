@@ -145,7 +145,6 @@ EOF
     fi
     if [[ "$2" == "--del" ]]; then
         PRESET="$3"
-
         
         if [[ -z "$PRESET" ]]; then
             echo "❌ Please specify a preset name to delete."
