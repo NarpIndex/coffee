@@ -6,7 +6,6 @@ coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
   local HISTFILE="$COFFEE/history"
-  export PATH="$HOME/.coffee/bin:$HOME/.local/bin:$PATH"
 
   # Ensure shell directory exists
   if [[ ! -d "$COFFEE" ]]; then
