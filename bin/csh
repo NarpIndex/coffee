@@ -9,8 +9,15 @@ coffee_shell() {
 
   # Ensure shell directory exists
   if [[ ! -d "$COFFEE" ]]; then
-    mkdir -p "$COFFEE"
+      mkdir -p "$COFFEE"
+      cat << 'EOF' > "$COFFEE/rc"
+#!/bin/bash
+# Coffee RC
+EOF
+      chmod +x "$COFFEE/rc"
   fi
+
+  exec "$COFFEE/rc"
 
   if [[ ! -d "$COFFEE/presets" ]]; then
       mkdir "$COFFEE/presets"
