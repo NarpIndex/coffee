@@ -3,7 +3,7 @@
 COFFEE_DIR="$HOME/.coffee"
 CONF_FILE="$COFFEE_DIR/config/csh.conf"
 
-if [[ ! -d "$COFFEE_DIR" ]]; then
+if [[ ! -d "$COFFEE_DIR/config" ]]; then
     mkdir -p "$COFFEE_DIR/config"
 fi
 
