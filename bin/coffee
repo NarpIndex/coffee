@@ -160,7 +160,14 @@ EOF
     fi
 
     PRESET="$2"
+
+    if [[ -z "$PRESET" ]]; then
+        echo "❌ Please specify a preset name to delete."
+        exit 1
+    fi
+
     PRESET_DIR="$COFFEE_DIR/presets/$PRESET"
+    
     if [[ -z "$PRESET" ]]; then
         echo "❌ Please specify a preset."
         exit 1
