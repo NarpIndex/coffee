@@ -1,0 +1,3 @@
+NAME="Hacker"
+ICON="💀"
+DECRIPTION="A hacker-themed preset."
