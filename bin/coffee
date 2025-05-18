@@ -190,3 +190,48 @@ EOF
     echo "✅ Loaded preset $PRESET."
     exit 0
 fi
+
+coffee_patch_list() {
+  local PATCHDIR="$HOME/.coffee/patches"
+
+  echo "📦 Patch List:"
+  for patch in "$PATCHDIR"/*; do
+    [[ -d "$patch" ]] || continue
+
+    local META="$patch/metadata.txt"
+    local NAME CATALOG DESC ICON PATCHFILES
+
+    CATALOG="$(basename "$patch")"
+    NAME="$CATALOG"
+    DESC="(No description)"
+    ICON="📜"
+
+    if [[ -f "$META" ]]; then
+      while IFS='=' read -r key value; do
+        # Strip surrounding quotes from value
+        value="${value%\"}"
+        value="${value#\"}"
+
+        case "$key" in
+          Name) NAME="$value" ;;
+          Description) DESC="$value" ;;
+          Icon) ICON="$value" ;;
+        esac
+      done < "$META"
+    fi
+
+    # Auto-detect all .sh scripts
+    PATCHFILES=$(find "$patch" -maxdepth 1 -type f -name "*.sh" | sed -E 's|.*/||; s|\.sh$||' | sort | paste -sd, -)
+
+    echo -e "$ICON $NAME"
+    echo -e "    📄 Description: $DESC"
+    echo -e "    📁 Catalog: $CATALOG"
+    echo -e "    📚 Patches: $PATCHFILES"
+  done
+}
+
+if [[ "$1" == "patch" ]]; then
+    if [[ "$2" == "--list" ]]; then
+        coffee_path_list
+    fi
+fi
