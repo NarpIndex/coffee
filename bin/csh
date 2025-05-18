@@ -86,6 +86,7 @@ EOF
     if [[ "$cmd" == *"!!"* ]]; then
       last_cmd=$(tail -n 1 "$HISTFILE")
       cmd="${cmd//!!/$last_cmd}"
+      echo "$cmd"
     fi
 
     echo "$cmd" >> "$HISTFILE"
