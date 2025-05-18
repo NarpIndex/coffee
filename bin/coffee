@@ -238,7 +238,7 @@ patch_list() {
 }
 
 patch_add() {
-    local src="$3"
+    local src="$1"
     local name="$(basename $src)"
     if [[ "$name" == "" ]]; then
         echo "❌ Please specify a patch name."
@@ -262,7 +262,7 @@ patch_add() {
 }
 
 patch_new() {
-    name="$3"
+    local name="$1"
     if [[ -z "$name" ]]; then
         echo "❌ Please specify a patch name."
         return 1
@@ -287,7 +287,7 @@ EOF
 }
 
 patch_del() {
-    local name="$3"
+    local name="$1"
     if [[ -z "$name" ]]; then
         echo "❌ Please specify a patch name."
         return 1
@@ -308,15 +308,15 @@ patch_del() {
 
 if [[ "$1" == "patch" ]]; then
     if [[ "$2" == "--list" ]]; then
-        patch_list
+        patch_list "$3"
     fi
     if [[ "$2" == "--add" ]]; then
-        patch_add
+        patch_add "$3"
     fi
     if [[ "$2" == "--new" ]]; then
-        patch_new
+        patch_new "$3"
     fi
     if [[ "$2" == "--del" ]]; then
-        patch_del
+        patch_del "$3"
     fi
 fi
