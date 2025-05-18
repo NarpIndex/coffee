@@ -6,59 +6,72 @@ coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
   local HISTFILE="$COFFEE/history"
+
   [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
-  # Ensure shell directory exists
   if [[ ! -d "$COFFEE" ]]; then
-      mkdir -p "$COFFEE"
-      cat << 'EOF' > "$COFFEE/rc"
+    mkdir -p "$COFFEE"
+    cat << 'EOF' > "$COFFEE/rc"
 #!/bin/bash
 # Coffee RC
 EOF
-      chmod +x "$COFFEE/rc"
+    chmod +x "$COFFEE/rc"
   fi
+
   if [[ ! -f "$COFFEE/profile" ]]; then
-      cat << 'EOF' > "$COFFEE/profile"
+    cat << 'EOF' > "$COFFEE/profile"
 # ~/.coffee/profile
 # Run commands when Coffee Shell starts
 
 export PATH="$HOME/.coffee/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 EOF
-  source "$COFFEE/profile"
+    source "$COFFEE/profile"
   fi
-
 
   source "$COFFEE/rc"
 
   if [[ ! -d "$COFFEE/presets" ]]; then
-      mkdir "$COFFEE/presets"
-      coffee preset --copy
-      coffee preset cappuccino
+    mkdir "$COFFEE/presets"
+    coffee preset --copy
+    coffee preset cappuccino
   fi
 
-  # Load rest of the shell
   if [[ ! -f "$COFFEE/done" ]]; then
-      echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to get started."
-      touch "$COFFEE/done"
+    echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to get started."
+    touch "$COFFEE/done"
   fi
-  if [[ ! -f "$HISTFILE" ]]; then
-      touch "$HISTFILE"
-  fi
+
+  [[ -f "$HISTFILE" ]] || touch "$HISTFILE"
+
   for plugin in "$COFFEE/plugins/"*.sh; do
-      [[ -f "$plugin" ]] && source "$plugin"
+    [[ -f "$plugin" ]] && source "$plugin"
   done
+
   [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
 
   history -r "$HISTFILE"
 
+  local cmd=""
   while true; do
     [[ -f "$CONF" ]] && source "$CONF" # Load config
+
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
+
+    # Fallback-compatible input prompt
     if [[ -z "$cmd" ]]; then
-        IFS= read -r -e -p "$(echo -e "$PROMPT ")" cmd
+      if [[ -t 0 ]]; then
+        # Interactive TTY detected
+        printf "%s " "$PROMPT"
+        IFS= read -r cmd
+      else
+        # Not a TTY, fallback to plain read (shouldn't happen)
+        echo -n "$PROMPT "
+        IFS= read -r cmd
+      fi
     fi
+
     [[ -z "$cmd" ]] && continue
 
     echo "$cmd" >> "$HISTFILE"
@@ -76,21 +89,20 @@ EOF
         ;;
       restart)
         echo "♻  Restarting Coffee Shell..."
-        exec /usr/bin/csh
-        exit 0
+        exec /bin/bash "$0"
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
-            eval "$cmd" 2> >(sed "s|^.*: line [0-9]*: |$ERROR |" >&2)
+          eval "$cmd" 2> >(sed "s|^.*: line [0-9]*: |$ERROR |" >&2)
         else
-            echo "$ERROR Unknown command: $cmd"
+          echo "$ERROR Unknown command: $cmd"
         fi
         ;;
-
     esac
     cmd=""
   done
 }
+
 
 # Coffee Shell Script Mode
 if [[ -f "$1" ]]; then
