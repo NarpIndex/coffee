@@ -308,7 +308,7 @@ patch_del() {
 
 if [[ "$1" == "patch" ]]; then
     if [[ "$2" == "--list" ]]; then
-        patch_list "$3"
+        patch_list
     fi
     if [[ "$2" == "--add" ]]; then
         patch_add "$3"
