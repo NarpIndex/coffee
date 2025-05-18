@@ -63,7 +63,7 @@ EOF
   find "$PATCHDIR" -type f -name '*.sh' ! -path '*/disabled/*' | while read -r patch; do
     patch_dir=$(dirname "$patch")
     if [[ -f "$patch_dir/looped.txt" ]]; then
-        echo "bash $patch" >> "$temp_loop"
+        echo "source $patch" >> "$temp_loop"
     fi
     source "$patch"
   done
