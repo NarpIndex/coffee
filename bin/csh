@@ -78,9 +78,7 @@ EOF
     local ERROR="${CSH_ERROR:-❌}"
 
     printf "%s " "$PROMPT"
-    stty -echo
     IFS= read -r cmd
-    stty echo
 
     [[ -z "$cmd" ]] && continue
 
