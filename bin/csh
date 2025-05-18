@@ -78,7 +78,7 @@ EOF
     local ERROR="${CSH_ERROR:-❌}"
     should_continue=false
 
-    cf_input "$PROMPT"
+    cf_input "$PROMPT "
     cmd=$REPLY
 
     [[ -z "$cmd" ]] && continue
