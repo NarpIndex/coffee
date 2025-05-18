@@ -52,6 +52,19 @@ EOF
 
   history -r "$HISTFILE"
 
+  YELLOW='\033[1;33m'
+  NC='\033[0m' # No color
+
+  if ! command -v rlwrap >/dev/null 2>&1; then
+      echo -e "${YELLOW}⚠️  rlwrap is not installed — ☕ Shell will run without arrow key history or shortcuts like Ctrl+L.${NC}"
+      echo -e "${YELLOW}   You can install it with one of the following commands:${NC}"
+      echo -e "${YELLOW}     • Arch Linux:   sudo pacman -S rlwrap${NC}"
+      echo -e "${YELLOW}     • Debian/Ubuntu: sudo apt install rlwrap${NC}"
+      echo -e "${YELLOW}     • Fedora:       sudo dnf5 install rlwrap${NC}"
+  fi
+
+
+
   local cmd=""
   while true; do
     [[ -f "$CONF" ]] && source "$CONF" # Load config
@@ -60,9 +73,14 @@ EOF
     local ERROR="${CSH_ERROR:-❌}"
 
     if [[ -z "$cmd" ]]; then
-        # Interactive TTY detected
+      if command -v rlwrap >/dev/null 2>&1; then
+        # Read with rlwrap
+        cmd="$(rlwrap -H "$HISTFILE" -S "$PROMPT " bash -c 'read -e -p "" line; echo "$line"')"
+      else
+        # Fallback
         printf "%s " "$PROMPT"
         IFS= read -r cmd
+      fi
     fi
 
     [[ -z "$cmd" ]] && continue
