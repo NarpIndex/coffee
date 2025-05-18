@@ -33,6 +33,10 @@ int main(int argc, char *argv[]) {
     rl_instream = tty;
     rl_outstream = tty;
 
+    rl_initialize();
+
+    using_history();
+
     if (history_file) {
         read_history(history_file);
     }
