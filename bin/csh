@@ -63,6 +63,13 @@ EOF
       echo -e "${YELLOW}     • Fedora:       sudo dnf5 install rlwrap${NC}"
   fi
 
+  # Load enabled patches
+  PATCHDIR="$COFFEE/patches"
+  if [[ -d "$PATCHDIR" ]]; then
+    for patch in "$PATCHDIR"/*.sh; do
+      [[ -f "$patch" ]] && source "$patch"
+    done
+  fi
 
 
   local cmd=""
