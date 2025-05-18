@@ -3,7 +3,7 @@
 source /usr/bitey/software/coffee/pak.conf
 VERSION="$PACKAGE_VERSION"
 cf_input() {
-    REPLY=$(reader "$1" -e "$COFFEE_HISTORY_FILE")
+    REPLY=$(reader "$1" -e "$HISTFILE")
 }
 coffee_shell() {
   local COFFEE="$HOME/.coffee"
@@ -85,12 +85,12 @@ EOF
 
     # Replace !! with last command from history
     if [[ "$cmd" == *"!!"* ]]; then
+      sed -i '$d' "$HISTFILE"
       last_cmd=$(tail -n 1 "$HISTFILE")
       cmd="${cmd//!!/$last_cmd}"
+      echo "$cmd" >> "$HISTFILE"
+      history -s "$cmd"
     fi
-
-    echo "$cmd" >> "$HISTFILE"
-    history -s "$cmd"
 
     export cmd
     source "$temp_loop"
