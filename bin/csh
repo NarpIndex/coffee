@@ -89,6 +89,9 @@ EOF
 
     export cmd
     bash "$temp_loop"
+    if $should_continue; then
+        continue
+    fi
 
     case "$cmd" in
       exit)
