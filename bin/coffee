@@ -232,6 +232,6 @@ coffee_patch_list() {
 
 if [[ "$1" == "patch" ]]; then
     if [[ "$2" == "--list" ]]; then
-        coffee_path_list
+        coffee_patch_list
     fi
 fi
