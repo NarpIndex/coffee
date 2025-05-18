@@ -59,17 +59,10 @@ EOF
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
 
-    # Fallback-compatible input prompt
     if [[ -z "$cmd" ]]; then
-      if [[ -t 0 ]]; then
         # Interactive TTY detected
         printf "%s " "$PROMPT"
         IFS= read -r cmd
-      else
-        # Not a TTY, fallback to plain read (shouldn't happen)
-        echo -n "$PROMPT "
-        IFS= read -r cmd
-      fi
     fi
 
     [[ -z "$cmd" ]] && continue
