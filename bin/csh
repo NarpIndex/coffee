@@ -80,8 +80,14 @@ EOF
     printf "%s " "$PROMPT"
     IFS= read -r cmd
 
-
     [[ -z "$cmd" ]] && continue
+
+    # Replace !! with last command from history
+    if [[ "$cmd" == *"!!"* ]]; then
+      last_cmd=$(tail -n 1 "$HISTFILE")
+      cmd="${cmd//!!/$last_cmd}"
+      echo "$cmd"
+    fi
 
     echo "$cmd" >> "$HISTFILE"
     history -s "$cmd"
