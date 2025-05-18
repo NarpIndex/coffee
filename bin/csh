@@ -7,12 +7,6 @@ coffee_shell() {
   local CONF="$COFFEE/config/csh.conf"
   local HISTFILE="$COFFEE/history"
 
-  # Re-exec this script through rlwrap if available and not already running under rlwrap
-  if command -v rlwrap >/dev/null 2>&1 && [[ -z "$UNDER_RLWRAP" ]]; then
-      export UNDER_RLWRAP=1
-      exec rlwrap -n -H "$HISTFILE" -- "$0"
-  fi
-
   [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
 
   if [[ ! -d "$COFFEE" ]]; then
@@ -77,8 +71,7 @@ EOF
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
 
-    printf "%s " "$PROMPT"
-    IFS= read -r cmd
+    read -ep "$PROMPT " cmd
 
     [[ -z "$cmd" ]] && continue
 
