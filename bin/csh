@@ -2,6 +2,9 @@
 
 source /usr/bitey/software/coffee/pak.conf
 VERSION="$PACKAGE_VERSION"
+cf_input() {
+    REPLY=$(reader "$1" -e "$COFFEE_HISTORY_FILE")
+}
 coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
@@ -75,7 +78,8 @@ EOF
     local ERROR="${CSH_ERROR:-❌}"
     should_continue=false
 
-    read -ep "$PROMPT " cmd
+    cf_input "$PROMPT"
+    cmd=$REPLY
 
     [[ -z "$cmd" ]] && continue
 
