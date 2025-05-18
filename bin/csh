@@ -68,15 +68,14 @@ EOF
   local cmd=""
   while true; do
     [[ -f "$CONF" ]] && source "$CONF" # Load config
+    local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
 
     # Re-exec this script through rlwrap if available and not already running under rlwrap
     if command -v rlwrap >/dev/null 2>&1 && [[ -z "$UNDER_RLWRAP" ]]; then
         export UNDER_RLWRAP=1
-        exec rlwrap -H "$HISTFILE" -S "☕️ " -- "$0"
+        exec rlwrap -H "$HISTFILE" -S "$PROMPT " -- "$0"
     fi
 
-
-    local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
 
     printf "%s " "$PROMPT"
