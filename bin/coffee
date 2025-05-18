@@ -52,6 +52,11 @@ if [[ "$1" == "--help" ]]; then
     echo "    coffee preset --copy - Create presets directory and copy default presets."
     echo "    coffee preset --list - See all presets."
     echo "    coffee preset --new <ID> - Create a new preset."
+    echo "    coffee preset --del <ID> - Delete a preset."
+    echo "    coffee patch --list - List patches."
+    echo "    coffee patch --add - Add a patch."
+    echo "    coffee patch --new - Create a new patch."
+    echo "    coffee patch --del - Delete a patch."
     echo "    coffee --help - See the help message."
     echo "    coffee --version - See the version."
     echo "💻 Other:"
@@ -191,7 +196,9 @@ EOF
     exit 0
 fi
 
-coffee_patch_list() {
+PATCH_DIR="$HOME/.coffee/patches"
+
+patch_list() {
   local PATCHDIR="$HOME/.coffee/patches"
 
   echo "📦 Patch List:"
@@ -230,8 +237,86 @@ coffee_patch_list() {
   done
 }
 
+patch_add() {
+    local src="$3"
+    local name="$(basename $src)"
+    if [[ -z "$name" ]]; then
+        echo "❌ Please specify a patch name."
+        return 1
+    fi
+    
+    local dst="$PATCH_DIR/$name"
+
+    if [[ ! -d "$src" ]]; then
+        echo "❌ Patch source was not found."
+        return 1
+    fi
+
+    if [[ -d "$dst" ]]; then
+        echo "⚠️ Patch '$name' already added."
+        return 1
+    fi
+
+    cp -r -- "$src" "$dst"
+    echo "✅ Patch '$name' added."
+}
+
+patch_new() {
+    local name="$3"
+    if [[ -z "$name" ]]; then
+        echo "❌ Please specify a patch name."
+        return 1
+    fi
+
+    local path="$PATCH_DIR/disabled/$name"
+
+    if [[ -d "$path" ]]; then
+        echo "⚠️ Patch '$name' already exists."
+        return 1
+    fi
+
+    mkdir -p "$path"
+    cat > "$path/metadata.txt" <<EOF
+Name="$name"
+Icon="📜"
+Description="Describe this patch here."
+EOF
+    touch "$path/main.sh"
+
+    echo "✅ New patch '$name' created at $path"
+}
+
+patch_del() {
+    local name="$3"
+    if [[ -z "$name" ]]; then
+        echo "❌ Please specify a patch name."
+        return 1
+    fi
+
+    local src="$PATCH_DIR/$name"
+    local disabled="$PATCH_DIR/disabled/$name"
+
+    if [[ -d "$src" ]]; then
+        rm -rf "$src"
+        echo "🗑️ Deleted from patches: $name"
+    fi
+    if [[ -d "$disabled" ]]; then
+        rm -rf "$disabled"
+        echo "🗑️ Deleted from patches: $name"
+    fi
+}
+
 if [[ "$1" == "patch" ]]; then
     if [[ "$2" == "--list" ]]; then
-        coffee_patch_list
+        patch_list
+    fi
+    if [[ "$2" == "--add" ]]; then
+        patch_add
+    fi
+    if [[ "$2" == "--new" ]]; then
+        patch_new
+    fi
+    if [[ "$2" == "--del" ]]; then
+        patch_del
     fi
 fi
