@@ -87,6 +87,7 @@ EOF
     echo "$cmd" >> "$HISTFILE"
     history -s "$cmd"
 
+    export cmd
     bash "$temp_loop"
 
     case "$cmd" in
