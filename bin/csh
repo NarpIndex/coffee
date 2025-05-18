@@ -73,6 +73,7 @@ EOF
     [[ -f "$CONF" ]] && source "$CONF" # Load config
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
+    should_continue=false
 
     read -ep "$PROMPT " cmd
 
