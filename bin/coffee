@@ -203,11 +203,10 @@ patch_list() {
 
   echo "📦 Patch List:"
   for patch in "$PATCHDIR"/*; do
-    [[ -d "$patch" ]] || continue
-
     if [[ "$patch" == "disabled" ]]; then
         continue
     fi
+    [[ -d "$patch" ]] || continue
 
     local META="$patch/metadata.txt"
     local NAME CATALOG DESC ICON PATCHFILES
