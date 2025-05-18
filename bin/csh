@@ -88,7 +88,7 @@ EOF
     history -s "$cmd"
 
     export cmd
-    bash "$temp_loop"
+    source "$temp_loop"
     if $should_continue; then
         continue
     fi
