@@ -240,7 +240,7 @@ patch_list() {
 patch_add() {
     local src="$3"
     local name="$(basename $src)"
-    if [[ -z "$name" ]]; then
+    if [[ "$name" == "" ]]; then
         echo "❌ Please specify a patch name."
         return 1
     fi
