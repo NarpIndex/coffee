@@ -3,6 +3,8 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 int main(int argc, char *argv[]) {
     const char *prompt = ">> ";
@@ -16,6 +18,21 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // Open /dev/tty for true terminal I/O
+    int tty_fd = open("/dev/tty", O_RDWR);
+    if (tty_fd == -1) {
+        perror("Cannot open /dev/tty");
+        return 1;
+    }
+    FILE *tty = fdopen(tty_fd, "r+");
+    if (!tty) {
+        perror("fdopen failed");
+        return 1;
+    }
+
+    rl_instream = tty;
+    rl_outstream = tty;
+
     if (history_file) {
         read_history(history_file);
     }
@@ -27,11 +44,10 @@ int main(int argc, char *argv[]) {
             add_history(input);
             write_history(history_file);
         }
-
-        // Only print the input!
         puts(input);
         free(input);
     }
 
+    fclose(tty);
     return 0;
 }
