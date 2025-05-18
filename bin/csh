@@ -65,11 +65,9 @@ EOF
 
   # Load enabled patches
   PATCHDIR="$COFFEE/patches"
-  if [[ -d "$PATCHDIR" ]]; then
-    for patch in "$PATCHDIR"/*.sh; do
-      [[ -f "$patch" ]] && source "$patch"
-    done
-  fi
+  find "$PATCHDIR" -type f -name '*.sh' ! -path '*/disabled/*' | while read -r patch; do
+    source "$patch"
+  done
 
 
   local cmd=""
