@@ -152,15 +152,7 @@ EOF
 
 # Coffee Shell Script Mode
 if [[ -f "$1" ]]; then
-    SCRIPT="$1"
-    if [[ ! -f "$SCRIPT" ]]; then
-        echo "❌ $SCRIPT: No such file or directory."
-    fi
-    while IFS= read -r line || [[ -n "$line" ]]; do
-        cmd="$line"
-        source /usr/bin/coffee_shell || exit 1
-    done < "$SCRIPT"
-    exit 0
+    run_script "$1"
 fi
 
 coffee_shell
