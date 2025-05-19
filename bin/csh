@@ -1,10 +1,30 @@
 #!/bin/bash -l
 
+loginshell_function() {
+  # Source global profile files (if present)
+  [[ -f /etc/profile ]] && source /etc/profile
+
+  # Source user login files
+  [[ -f ~/.profile ]] && source ~/.profile
+
+  # Source Coffee-specific profile
+  [[ -f "$HOME/.coffee/profile" ]] && source "$HOME/.coffee/profile"
+  [[ -f "$HOME/.coffee/login" ]] && source "$HOME/.coffee/login"
+
+  # Set basic environment variables if not already set
+  export PATH="$HOME/.coffee/bin:$HOME/.local/bin:$PATH"
+  export LANG="${LANG:-en_US.UTF-8}"
+  export SHELL="${SHELL:-/usr/bin/csh}"
+  export USER="${USER:-$(whoami)}"
+  export HOME="${HOME:-/home/$USER}"
+  
+  echo -e "🌅 Login shell environment initialized for $USER"
+}
+
 # === LOGIN ENVIRONMENT SETUP ===
 # Load global profile if running as login shell
 if shopt -q login_shell; then
-  [[ -f /etc/profile ]] && source /etc/profile
-  [[ -f ~/.profile ]] && source ~/.profile
+   loginshell_function
 fi
 
 # === COFFEE SHELL SETUP ===
@@ -35,15 +55,6 @@ coffee_shell() {
 
   mkdir -p "$COFFEE" "$COFFEE/presets" "$COFFEE/config"
 
-  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile" || {
-    cat << 'EOF' > "$COFFEE/profile"
-# ~/.coffee/profile
-export PATH="$HOME/.coffee/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-EOF
-    source "$COFFEE/profile"
-  }
-
   [[ -f "$COFFEE/rc" ]] || {
     echo -e "#!/bin/bash\n# Coffee RC" > "$COFFEE/rc"
     chmod +x "$COFFEE/rc"
@@ -70,7 +81,7 @@ EOF
   local temp_loop
   temp_loop=$(mktemp)
 
-  # === LOOPED PATCHES LOADING ===
+  # === PATCHES LOADING ===
   PATCHDIR="$COFFEE/patches"
   find "$PATCHDIR" -type f -name '*.sh' ! -path '*/disabled/*' | while read -r patch; do
     patch_dir=$(dirname "$patch")
@@ -139,6 +150,12 @@ EOF
     cmd=""
   done
 }
+
+# === LOGINSHELL FLAG ===
+if [[ "$1" == "-l" ]]; then
+    loginshell_function
+    exit 0
+fi
 
 # === SCRIPT MODE OR SHELL MODE ===
 if [[ -f "$1" ]]; then
