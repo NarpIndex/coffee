@@ -1,102 +1,97 @@
-#!/bin/bash
+#!/bin/bash -l
 
+# === LOGIN ENVIRONMENT SETUP ===
+# Load global profile if running as login shell
+if shopt -q login_shell; then
+  [[ -f /etc/profile ]] && source /etc/profile
+  [[ -f ~/.profile ]] && source ~/.profile
+fi
+
+# === COFFEE SHELL SETUP ===
 source /usr/bitey/software/coffee/pak.conf
 VERSION="$PACKAGE_VERSION"
+
 cf_input() {
     REPLY=$(reader "$1" -e "$HISTFILE")
     history -s "$REPLY"
 }
+
 run_script() {
     SCRIPT="$1"
     if [[ ! -f "$SCRIPT" ]]; then
         echo "❌ $SCRIPT: No such file or directory."
+        return 1
     fi
     while IFS= read -r line || [[ -n "$line" ]]; do
         cmd="$line"
         source /usr/bin/csh || exit 0
     done < "$SCRIPT"
 }
+
 coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
   local HISTFILE="$COFFEE/history"
 
-  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile"
+  mkdir -p "$COFFEE" "$COFFEE/presets" "$COFFEE/config"
 
-  if [[ ! -d "$COFFEE" ]]; then
-    mkdir -p "$COFFEE"
-    cat << 'EOF' > "$COFFEE/rc"
-#!/bin/bash
-# Coffee RC
-EOF
-    chmod +x "$COFFEE/rc"
-  fi
-
-  if [[ ! -f "$COFFEE/profile" ]]; then
+  [[ -f "$COFFEE/profile" ]] && source "$COFFEE/profile" || {
     cat << 'EOF' > "$COFFEE/profile"
 # ~/.coffee/profile
-# Run commands when Coffee Shell starts
-
 export PATH="$HOME/.coffee/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 EOF
     source "$COFFEE/profile"
-  fi
+  }
 
+  [[ -f "$COFFEE/rc" ]] || {
+    echo -e "#!/bin/bash\n# Coffee RC" > "$COFFEE/rc"
+    chmod +x "$COFFEE/rc"
+  }
   source "$COFFEE/rc"
 
-  if [[ ! -d "$COFFEE/presets" ]]; then
-    mkdir "$COFFEE/presets"
-    coffee preset --copy
-    coffee preset cappuccino
-  fi
-
-  if [[ ! -f "$COFFEE/done" ]]; then
+  [[ -f "$COFFEE/done" ]] || {
     echo -e "☕️ Welcome to Coffee Shell!\n❔ Run \"help\" to get started."
     touch "$COFFEE/done"
-  fi
+  }
 
   [[ -f "$HISTFILE" ]] || touch "$HISTFILE"
+  [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
 
   for plugin in "$COFFEE/plugins/"*.sh; do
     [[ -f "$plugin" ]] && source "$plugin"
   done
 
-  [[ -f "$COFFEE/config/aliases.conf" ]] && source "$COFFEE/config/aliases.conf"
-
   history -r "$HISTFILE"
 
   YELLOW='\033[1;33m'
-  NC='\033[0m' # No color
-  
+  NC='\033[0m'
+
   local temp_loop
   temp_loop=$(mktemp)
 
-  # Load enabled patches
+  # === LOOPED PATCHES LOADING ===
   PATCHDIR="$COFFEE/patches"
   find "$PATCHDIR" -type f -name '*.sh' ! -path '*/disabled/*' | while read -r patch; do
     patch_dir=$(dirname "$patch")
-    if [[ -f "$patch_dir/looped.txt" ]]; then
-        echo "source $patch" >> "$temp_loop"
-    fi
+    [[ -f "$patch_dir/looped.txt" ]] && echo "source $patch" >> "$temp_loop"
     source "$patch"
   done
-  
+
   local cmd=""
   while true; do
-    [[ -f "$CONF" ]] && source "$CONF" # Load config
+    [[ -f "$CONF" ]] && source "$CONF"
     local PROMPT="${CSH_PROMPT:-☕️ $(whoami) $(pwd)>}"
     local ERROR="${CSH_ERROR:-❌}"
     should_continue=false
 
     if [[ -z "$cmd" ]]; then
-        cf_input "$PROMPT "
-        cmd=$REPLY
+      cf_input "$PROMPT "
+      cmd=$REPLY
     fi
 
     [[ -z "$cmd" ]] && continue
 
-    # Replace !! with last command from history
     if [[ "$cmd" == *"!!"* ]]; then
       sed -i '$d' "$HISTFILE"
       last_cmd=$(tail -n 1 "$HISTFILE")
@@ -107,12 +102,12 @@ EOF
 
     args=($cmd)
     main_cmd="${args[0]}"
-    shift_args=("${args[@]:1}") # everything after $1
+    shift_args=("${args[@]:1}")
 
     export cmd
     source "$temp_loop"
     if $should_continue; then
-        continue
+      continue
     fi
 
     case "$main_cmd" in
@@ -128,14 +123,10 @@ EOF
         ;;
       restart)
         echo "♻  Restarting Coffee Shell..."
-        exec /bin/bash "$0"
+        exec "$0"
         ;;
       run)
-        if [[ -z "${shift_args[0]}" ]]; then
-            echo "❌ Usage: run <script>"
-        else
-            run_script "${shift_args[0]}"
-        fi
+        [[ -z "${shift_args[0]}" ]] && echo "❌ Usage: run <script>" || run_script "${shift_args[0]}"
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
@@ -149,10 +140,10 @@ EOF
   done
 }
 
-
-# Coffee Shell Script Mode
+# === SCRIPT MODE OR SHELL MODE ===
 if [[ -f "$1" ]]; then
-    run_script "$1"
+  run_script "$1"
+  exit 0
 fi
 
 coffee_shell
