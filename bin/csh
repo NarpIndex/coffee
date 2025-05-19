@@ -7,6 +7,16 @@ cf_input() {
     echo "$REPLY" >> "$HISTFILE"
     history -s "$REPLY"
 }
+run_script() {
+    SCRIPT="$1"
+    if [[ ! -f "$SCRIPT" ]]; then
+        echo "❌ $SCRIPT: No such file or directory."
+    fi
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        cmd="$line"
+        source /usr/bin/csh || exit 1
+    done < "$SCRIPT"
+}
 coffee_shell() {
   local COFFEE="$HOME/.coffee"
   local CONF="$COFFEE/config/csh.conf"
@@ -80,8 +90,10 @@ EOF
     local ERROR="${CSH_ERROR:-❌}"
     should_continue=false
 
-    cf_input "$PROMPT "
-    cmd=$REPLY
+    if [[ -z "$cmd" ]]; then
+        cf_input "$PROMPT "
+        cmd=$REPLY
+    fi
 
     [[ -z "$cmd" ]] && continue
 
@@ -94,13 +106,17 @@ EOF
       history -s "$cmd"
     fi
 
+    args=($cmd)
+    main_cmd="${args[0]}"
+    shift_args=("${args[@]:1}") # everything after $1
+
     export cmd
     source "$temp_loop"
     if $should_continue; then
         continue
     fi
 
-    case "$cmd" in
+    case "$main_cmd" in
       exit)
         history -a "$HISTFILE"
         break
@@ -114,6 +130,13 @@ EOF
       restart)
         echo "♻  Restarting Coffee Shell..."
         exec /bin/bash "$0"
+        ;;
+      run)
+        if [[ -z "${shift_args[0]}" ]]; then
+            echo "❌ Usage: run <script>"
+        else
+            run_script "${shift_args[0]}"
+        fi
         ;;
       *)
         if command -v "${cmd%% *}" >/dev/null 2>&1; then
