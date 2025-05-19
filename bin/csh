@@ -4,7 +4,6 @@ source /usr/bitey/software/coffee/pak.conf
 VERSION="$PACKAGE_VERSION"
 cf_input() {
     REPLY=$(reader "$1" -e "$HISTFILE")
-    echo "$REPLY" >> "$HISTFILE"
     history -s "$REPLY"
 }
 run_script() {
