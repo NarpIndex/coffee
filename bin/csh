@@ -13,7 +13,7 @@ run_script() {
     fi
     while IFS= read -r line || [[ -n "$line" ]]; do
         cmd="$line"
-        source /usr/bin/csh || exit 1
+        source /usr/bin/csh || exit 0
     done < "$SCRIPT"
 }
 coffee_shell() {
